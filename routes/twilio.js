@@ -8,10 +8,10 @@ var router = function(app) {
     var pattern = '.+/.+/.+';
     var baseUrl = req.protocol + '://' + req.get('host');
     // overwrite api server when in development, make sure to run this app with `foreman start`
-    if ('development' == app.get('env') || 'test' == app.get('env')) {
+    if ('development' == app.get('env')) {
       baseUrl = "http://localhost:5000";
-    } else if('staging' == app.get('env')){
-      baseUrl = "http://salvavida-stage.herokuapp.com";
+    } else if('test' == app.get('env')) {
+      baseUrl = "http://salvavida.org";
     }
 
     var feedPosted = function(err, response, body) {
@@ -22,7 +22,7 @@ var router = function(app) {
         msg = 'Thanks for using salvavida.org. A record has been created/updated for: '+body.name;
       }
       twilio.sms.messages.create({
-        from: global.config.twilio.sender,
+        from: global.config.sender,
         to: origin,
         body: msg
       }, function() {
